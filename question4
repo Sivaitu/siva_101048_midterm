@@ -1,0 +1,175 @@
+#---------
+# name: NumberGuess.rb
+#
+#----------------
+ 
+class Screen
+ 
+ def cls
+   puts ("\n" * 30)
+   puts "\a"
+ end
+ 
+ def pause
+    STDIN.gets
+ end
+ 
+end
+ 
+class Game
+    def display_greeting
+        Console_Screen.cls
+        print "\t\t Welcome to the Ruby Number Guessing Game!" +
+        "\n\n\n\n\n\n\n\n\n\n\n\n\ Press Enter to " + 
+        "continue."
+ 
+        Console_Screen.pause
+    end
+ 
+    def display_instruction
+        Console_Screen.cls
+        puts "Instruction:\n\n"
+ 
+        puts "This game randomly generates a number from 1 to 1000 and "
+        puts "challaenges you to identify it in as few guesses and possible "
+    end
+ 
+    def generate_number
+        return randomNo = 1 + rand(1000)
+    end
+ 
+    def play_game
+        number = generate_number
+        times_gussed = 0;
+ 
+        loop do
+            Console_Screen.cls
+            if (times_gussed) < 10 then 
+                print "\nEnter your guess and press the enter key: "
+     
+                reply = STDIN.gets
+                reply.chop!
+                reply = reply.to_i
+     
+                if reply < 1 or reply > 1000 then
+                    Console_Screen.cls
+                    print "You have entered an invalid character"
+                    print "\nOnly numbers from 1 to 1000 are valid! Press Enter to Continue"
+                    Console_Screen.pause
+                    redo # redo the ciurrent iteration of the loop
+                end
+           
+                if reply == number then
+                    Console_Screen.cls
+                    times_gussed = times_gussed + 1
+                    @@games_won = @@games_won + 1
+                    @@overall_guesses = @@overall_guesses + times_gussed
+                    avarage_guess = @@overall_guesses.to_f/@@games_won
+                    avarage_guess_overall = @@overall_guesses.to_f/@@counter 
+                    print "You have guessed the number! Press Enter to continue."
+                    print "\nTotal number of gusses for this game: " + times_gussed.to_s
+                    print "\nAvarage guesses for winning a game: " + avarage_guess.to_s
+                    print "\nAvarage guesses per game: " + avarage_guess_overall.to_s
+                    print "\nNumber of games played: " + @@counter.to_s
+                    print "\nNumber of games won: " + @@games_won.to_s 
+                    print "\nNumber of games lost: " + @@games_lost.to_s 
+                    Console_Screen.pause
+                    break
+                elsif reply < number then
+                    Console_Screen.cls
+                    times_gussed = times_gussed + 1
+                    print 'Guess Count: ' + times_gussed.to_s
+                    print "\nYour guess is too low! Press enter to continue."
+                    Console_Screen.pause
+                elsif reply > number then
+                    times_gussed = times_gussed + 1
+                    Console_Screen.cls
+                    print 'Guess Count: ' + times_gussed.to_s
+                    print "\nYour guess is too high! Press enter to continue."
+                    Console_Screen.pause
+                end
+            else
+                Console_Screen.cls
+                @@overall_guesses = @@overall_guesses + times_gussed
+                @@games_lost = @@games_lost + 1
+                avarage_guess = @@games_won ? @@overall_guesses.to_f/@@games_won : @@overall_guesses
+                avarage_guess_overall = @@overall_guesses.to_f/@@counter 
+                print "You have lost the game! Press Enter to continue."
+                print "\nTotal number of gusses for this game: " + times_gussed.to_s
+                print "\nAvarage guesses for winning a game: " + avarage_guess.to_s
+                print "\nAvarage guesses per game: " + avarage_guess_overall.to_s
+                print "\nNumber of games played: " + @@counter.to_s
+                print "\nNumber of games won: " + @@games_won.to_s 
+                print "\nNumber of games lost: " + @@games_lost.to_s 
+                Console_Screen.pause
+                break
+
+            end
+ 
+        end
+             
+    end
+ 
+    def display_credits
+        Console_Screen.cls
+        puts "\t\t\Thanks you for playing the number game!!"
+    end
+ 
+    $noRight = 0
+    @@counter = 0
+    @@overall_guesses = 0
+    @@games_won = 0
+    @@games_lost = 0
+ 
+    Console_Screen = Screen.new
+ 
+    SQ = Game.new
+ 
+    SQ.display_greeting
+ 
+    answer = ""
+ 
+    loop do
+        Console_Screen.cls
+ 
+        print "Are you ready to play the Ruby Number Guessing Game? (y/n): "
+ 
+        answer = STDIN.gets
+ 
+        answer.chop!
+ 
+        break if answer == "y" || answer == "n"
+    end
+ 
+    if answer == "n"
+ 
+        Console_Screen.cls
+ 
+        puts "Perhaps anoher time.\n\n"
+ 
+    else
+
+        SQ.display_instruction
+
+        loop do
+            @@counter = @@counter + 1
+            print "you have played the game " + @@counter.to_s + " time! Press Enter to Continue"
+            Console_Screen.pause
+
+            SQ.play_game
+ 
+            Console_Screen.cls
+ 
+            print "Would you like to play again? (y/n): "
+ 
+            playAgain = STDIN.gets
+            playAgain.chop!
+ 
+            break if playAgain == "n"
+        end
+ 
+        SQ.display_credits
+ 
+    end
+ 
+end
